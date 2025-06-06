@@ -52,7 +52,6 @@ func TestAdd(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
-
 	t.Run("existing word", func(t *testing.T) {
 		word := "test"
 		definition := "this is just a test"
@@ -72,6 +71,29 @@ func TestUpdate(t *testing.T) {
 
 		err := dictionary.Update(word, definition)
 		assertError(t, err, ErrWordDoesNotExist)
+	})
+}
+
+func TestDelete(t *testing.T) {
+	t.Run("existing word", func(t *testing.T) {
+		word := "test"
+		dictionary := Dictionary{word: "test definition"}
+
+		dictionary.Delete(word)
+
+		_, err := dictionary.Search(word)
+
+		assertError(t, err, ErrNotFound)
+	})
+
+	t.Run("non existing word", func(t *testing.T) {
+
+		word := "test"
+		dictionary := Dictionary{}
+		err := dictionary.Delete(word)
+
+		assertError(t, err, ErrWordDoesNotExist)
+
 	})
 }
 

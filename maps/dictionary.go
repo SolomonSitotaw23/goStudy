@@ -55,6 +55,21 @@ func (d Dictionary) Update(word, newDefinition string) error {
 	return nil
 }
 
+func (d Dictionary) Delete(word string) error {
+
+	_, err := d.Search(word)
+
+	switch err {
+	case ErrNotFound:
+		return ErrWordDoesNotExist
+	case nil:
+		delete(d, word)
+	default:
+		return err
+	}
+	return nil
+}
+
 // Note on maps
 //  -> a nill map (var m map[string]string) will act like an empty map while reading
 // but it is a run time error if you tried to write
